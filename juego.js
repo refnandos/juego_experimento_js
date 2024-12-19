@@ -45,6 +45,7 @@ function randomCube(){
     return Math.floor(Math.random() * 25);
 }
 
+// se han añadido varios componentes
 function component(width, height, color, posicionX, posicionY) {
     this.width = width;
     this.height = height;
