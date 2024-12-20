@@ -30,11 +30,15 @@ function startGame() {
     
 }
 
+
+var ids = 0;
 function añadirobstaculo(){
+    
     tamaño = randomCube()+ 15;
     obs = new obstacle(tamaño, tamaño, "blue", 720, randomPosY());
     obstaculo.push(obs);
-    //alert ("tamaño: " + obstaculo.length)
+    obstaculo[ids].id = ids;
+    ids++;
 }
 
 function randomPosY(){
@@ -121,6 +125,7 @@ function colition(){
     };
 
 function obstacle(width, height, color, posicionX, posicionY) {
+    this.id;
     this.width = width;
     this.height = height;
     this.posicionX = posicionX;
@@ -163,7 +168,6 @@ function obstacle(width, height, color, posicionX, posicionY) {
             this.static = true;
         }
         }else{
-            this.speedY = 10;
             this.posicionY += this.speedY;
         }
     };
@@ -171,6 +175,19 @@ function obstacle(width, height, color, posicionX, posicionY) {
     this.choque = function(){
         if((this.posicionX) < (character.posicionX + character.width) && (this.posicionX ) > (character.posicionX - character.width)  && (this.posicionY) < (character.posicionY + character.height) && (this.posicionY ) > (character.posicionY - character.width)){
             alert("obstculo pasado");
+        }
+    }
+
+    this.acumular = function(){
+        for(var i = 0; i < obstaculo.length ; i++){
+            if(this.id != obstaculo[i].id){
+                if((this.posicionX) < (obstaculo[i].posicionX + obstaculo[i].width) && (this.posicionX ) > (obstaculo[i].posicionX - obstaculo[i].width)  && (this.posicionY) < (obstaculo[i].posicionY + obstaculo[i].height) && (this.posicionY ) > (obstaculo[i].posicionY - obstaculo[i].width)){
+                    this.static = true;
+                    this.speedX = 0;
+                }else{
+                    
+                }
+            }
         }
     }
 }
@@ -196,9 +213,13 @@ function updateGameArea() {
 function updateobstacles(){
     for(var i =0; i < obstaculo.length ; i++){
         if(obstaculo[i].static == false){
-        obstaculo[i].newPos();
-        obstaculo[i].update();
-        obstaculo[i].choque();
+            obstaculo[i].newPos();
+            obstaculo[i].update();
+            obstaculo[i].choque();
+            obstaculo[i].acumular();
+        }else{
+            obstaculo[i].update();
+            obstaculo[i].choque();
         }
     }
 }
