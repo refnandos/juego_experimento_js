@@ -111,18 +111,6 @@ function component(width, height, color, posicionX, posicionY) {
     
 }
 
-function colition(){
-    //    for(var i = 0; i< obstaculo.length ; i++){
-    //        alert("tambien")
-        if( character.posicionX > (obstaculo[0].posicionX - obstaculo[0].tamaño) && character.posicionX < (obstaculo[0].posicionX + obstaculo[0].tamaño)){
-            alert("has chocado")
-
-        };
-
-
-
-    //}
-    };
 
 function obstacle(width, height, color, posicionX, posicionY) {
     this.id;
@@ -185,7 +173,7 @@ function obstacle(width, height, color, posicionX, posicionY) {
                     this.static = true;
                     this.speedX = 0;
                 }else{
-                    
+
                 }
             }
         }
