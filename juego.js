@@ -22,12 +22,26 @@ var myGame = {
 };
 var obstaculo = [];
 var character;
+//variable de vidas
+var vidas = 3;
+var cantVidas = vidas;
+//puntaje auxiliar
+var puntajeaux = 0;
+
 
 function startGame() {
     myGame.start();
     añadirobstaculo();
+    actualizarVidas();
     character = new component(30, 30, "red", 10, 120); // Creamos el personaje
     
+}
+
+
+function actualizarVidas(){
+    for(var i = 0; i < cantVidas.length ; i++){
+        cantVidas[i] = new vida(10, 10, "yellow", 20, 20);
+    }
 }
 
 function añadirobstaculo(){
@@ -112,7 +126,6 @@ function colition(){
     //        alert("tambien")
         if( character.posicionX > (obstaculo[0].posicionX - obstaculo[0].tamaño) && character.posicionX < (obstaculo[0].posicionX + obstaculo[0].tamaño)){
             alert("has chocado")
-
         };
 
 
@@ -120,7 +133,7 @@ function colition(){
     //}
     };
 
-function obstacle(width, height, color, posicionX, posicionY) {
+function obstacle(width, height, color, posicionX, posicionY, border) {
     this.width = width;
     this.height = height;
     this.posicionX = posicionX;
@@ -169,13 +182,32 @@ function obstacle(width, height, color, posicionX, posicionY) {
     };
 
     this.choque = function(){
+
+        if(vidas <= 0){
+            alert("has perdido");
+        }else{
         if((this.posicionX) < (character.posicionX + character.width) && (this.posicionX ) > (character.posicionX - character.width)  && (this.posicionY) < (character.posicionY + character.height) && (this.posicionY ) > (character.posicionY - character.width)){
             alert("obstculo pasado");
+            --vidas;
+            puntajeaux = valor + 100;
+        }
         }
     }
 }
 
+function vida(width, height, color, posicionX, posicionY){
+    this.width = width;
+    this.height = height;
+    this.posicionX = posicionX;
+    this.posicionY = posicionY;
+    this.update = function() {
+        let context = myGame.context;
+        context.fillStyle = color;
+        context.fillRect(this.posicionX, this.posicionY, this.width, this.height);
+    };
+}
 
+// actualization of the game 
 function updateGameArea() {
     myGame.clear();
     updateobstacles();
@@ -193,12 +225,16 @@ function updateGameArea() {
     
 }
 
+
+//actualization of the array of obstacles
 function updateobstacles(){
     for(var i =0; i < obstaculo.length ; i++){
         if(obstaculo[i].static == false){
         obstaculo[i].newPos();
         obstaculo[i].update();
+        if(puntajeaux - valor <= 0){
         obstaculo[i].choque();
+        }
         }
     }
 }
@@ -221,6 +257,8 @@ function updatePointTable(){
 
 }
 
+
+//increase value of score and add an obstacle when reaching a specified number
 function aumentarValor(){
     
     this.valor +=1;
@@ -233,9 +271,7 @@ function aumentarValor(){
 }
 
 function moveUp(value) {
-    
     character.speedY -= value;
-
 }
 
 window.addEventListener(
@@ -281,6 +317,8 @@ function moveRight(value) {
 function moveLeft(value) {
     character.speedX -= value;
 }
+
+
 /*
 const input = document.querySelector("canvas");
 input.addEventListener("keydown", logKey);
