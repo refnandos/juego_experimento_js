@@ -44,11 +44,14 @@ function actualizarVidas(){
     }
 }
 
+var ids = 0;
 function añadirobstaculo(){
+    
     tamaño = randomCube()+ 15;
     obs = new obstacle(tamaño, tamaño, "blue", 720, randomPosY());
     obstaculo.push(obs);
-    //alert ("tamaño: " + obstaculo.length)
+    obstaculo[ids].id = ids;
+    ids++;
 }
 
 function randomPosY(){
@@ -121,19 +124,9 @@ function component(width, height, color, posicionX, posicionY) {
     
 }
 
-function colition(){
-    //    for(var i = 0; i< obstaculo.length ; i++){
-    //        alert("tambien")
-        if( character.posicionX > (obstaculo[0].posicionX - obstaculo[0].tamaño) && character.posicionX < (obstaculo[0].posicionX + obstaculo[0].tamaño)){
-            alert("has chocado")
-        };
 
-
-
-    //}
-    };
-
-function obstacle(width, height, color, posicionX, posicionY, border) {
+function obstacle(width, height, color, posicionX, posicionY) {
+    this.id;
     this.width = width;
     this.height = height;
     this.posicionX = posicionX;
@@ -176,7 +169,6 @@ function obstacle(width, height, color, posicionX, posicionY, border) {
             this.static = true;
         }
         }else{
-            this.speedY = 10;
             this.posicionY += this.speedY;
         }
     };
@@ -193,6 +185,20 @@ function obstacle(width, height, color, posicionX, posicionY, border) {
         }
         }
     }
+
+    this.acumular = function(){
+        for(var i = 0; i < obstaculo.length ; i++){
+            if(this.id != obstaculo[i].id){
+                if((this.posicionX) < (obstaculo[i].posicionX + obstaculo[i].width) && (this.posicionX ) > (obstaculo[i].posicionX - obstaculo[i].width)  && (this.posicionY) < (obstaculo[i].posicionY + obstaculo[i].height) && (this.posicionY ) > (obstaculo[i].posicionY - obstaculo[i].width)){
+                    this.static = true;
+                    this.speedX = 0;
+                }else{
+
+                }
+            }
+        }
+    }
+
 }
 
 function vida(width, height, color, posicionX, posicionY){
@@ -211,18 +217,14 @@ function vida(width, height, color, posicionX, posicionY){
 function updateGameArea() {
     myGame.clear();
     updateobstacles();
-    
-    colition();
     character.newPos();
     character.update();
-    
     
     if (character.speedX != 0 || character.speedY!=0){
         updatePointTable();
     }else{
         maxPoints();
     }
-    
 }
 
 
@@ -230,11 +232,15 @@ function updateGameArea() {
 function updateobstacles(){
     for(var i =0; i < obstaculo.length ; i++){
         if(obstaculo[i].static == false){
-        obstaculo[i].newPos();
-        obstaculo[i].update();
+            obstaculo[i].newPos();
+            obstaculo[i].update();
+            obstaculo[i].acumular();
         if(puntajeaux - valor <= 0){
-        obstaculo[i].choque();
+            obstaculo[i].choque();
         }
+        }else{
+            obstaculo[i].update();
+            obstaculo[i].choque();
         }
     }
 }
@@ -252,7 +258,7 @@ function maxPoints(){
 function updatePointTable(){
     var puntos = document.getElementById("puntaje");
     aumentarValor();
-    var aux = "<p>"+valor+ "caracter :" + character.posicionX + " obstucalo: " + obstaculo[0].posicionX + "</p>";
+    var aux = "<p>"+valor+ "</p>";
     puntos.innerHTML = aux;
 
 }
@@ -317,14 +323,3 @@ function moveRight(value) {
 function moveLeft(value) {
     character.speedX -= value;
 }
-
-
-/*
-const input = document.querySelector("canvas");
-input.addEventListener("keydown", logKey);
-
-const log = document.getElementById("log");
-
-function logKey(e) {
-  log.textContent += ` ${e.code}`;
-}*/
