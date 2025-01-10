@@ -178,24 +178,21 @@ function obstacle(width, height, color, posicionX, posicionY) {
             }
         }
     }
+
 }
 
 
 function updateGameArea() {
     myGame.clear();
     updateobstacles();
-    
-    colition();
     character.newPos();
     character.update();
-    
     
     if (character.speedX != 0 || character.speedY!=0){
         updatePointTable();
     }else{
         maxPoints();
     }
-    
 }
 
 function updateobstacles(){
@@ -225,7 +222,7 @@ function maxPoints(){
 function updatePointTable(){
     var puntos = document.getElementById("puntaje");
     aumentarValor();
-    var aux = "<p>"+valor+ "caracter :" + character.posicionX + " obstucalo: " + obstaculo[0].posicionX + "</p>";
+    var aux = "<p>"+valor+ "</p>";
     puntos.innerHTML = aux;
 
 }
@@ -290,12 +287,3 @@ function moveRight(value) {
 function moveLeft(value) {
     character.speedX -= value;
 }
-/*
-const input = document.querySelector("canvas");
-input.addEventListener("keydown", logKey);
-
-const log = document.getElementById("log");
-
-function logKey(e) {
-  log.textContent += ` ${e.code}`;
-}*/
